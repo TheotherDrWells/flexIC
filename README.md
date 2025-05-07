@@ -28,4 +28,4 @@ Most Iman–Conover implementations:
 
 ```r
 # Development version (until on CRAN)
-remotes::install_github("yourusername/flexIC")
+remotes::install_github("TheotherDrWells/flexIC")
