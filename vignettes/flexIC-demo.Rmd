@@ -1,0 +1,72 @@
+---
+title: "flexIC: Minimal, Runnable Demo"
+author: "Kevin E. Wells, PhD"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{flexIC demo}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+library(flexIC)
+library(mvtnorm)
+library(microbenchmark)
+set.seed(123)
+```
+
+## 1 Simulate marginals
+
+```{r}
+n <- 200; k <- 5
+Sigma <- matrix(0.6, k, k); diag(Sigma) <- 1
+X0  <- mvtnorm::rmvnorm(n, sigma = Sigma)      # raw data
+R_star <- cor(X0, method = "spearman")         # target rank‑R
+```
+
+## 2 IC (m = 1) vs flexIC (m = 50)
+
+```{r}
+## 2  IC (m = 1) vs flexIC (m = 20)
+
+out_ic   <- flexIC(X0, R_star, m = 1 ,  eps = 0   )   # classic IC
+out_flex <- flexIC(X0, R_star, m = 20, eps = 0.02)   # flexIC
+
+X_ic   <- out_ic[[1]]
+X_flex <- out_flex[[1]]
+
+
+
+if (is.null(dim(X_ic)))   X_ic   <- matrix(X_ic  , nrow = n, ncol = k)
+if (is.null(dim(X_flex))) X_flex <- matrix(X_flex, nrow = n, ncol = k)
+```
+
+## 3 Maximum rank‑error
+
+```{r}
+err_ic   <- max(abs(cor(X_ic  , method = "spearman") - R_star))
+err_flex <- max(abs(cor(X_flex, method = "spearman") - R_star))
+
+data.frame(
+  method         = c("IC (m = 1)", "flexIC (m = 50)"),
+  max_rank_error = c(err_ic, err_flex)
+)
+```
+
+## 4 Speed benchmark
+
+```{r}
+microbenchmark(
+  IC     = flexIC(X0, R_star, m = 1 ,  eps = 0   ),
+  flex50 = flexIC(X0, R_star, m = 50, eps = 0.02),
+  times  = 100L
+)
+```
+
+## 5 Session info
+
+```{r}
+sessionInfo()
+```
