@@ -2,19 +2,42 @@
 % Please edit documentation in R/flexIC.R
 \name{flexIC}
 \alias{flexIC}
-\title{Run Iman–Conover Rank-Preserving Transform}
+\title{Run the flexible Iman–Conover (flexIC) transform}
 \usage{
 flexIC(x, target_r = NULL, eps = 0.04, max_iter = 50)
 }
 \arguments{
-\item{x}{A numeric matrix or data.frame to transform.}
+\item{x}{Numeric matrix or data frame to transform.}
 
-\item{target_r}{Target rank correlation matrix (optional).}
+\item{target_r}{Optional target rank-correlation matrix; defaults to
+\code{cor(x, method = "spearman")}.}
 
-\item{eps}{Convergence tolerance (default = 0.04).}
+\item{eps}{Convergence tolerance for the maximum absolute r-difference.}
 
-\item{max_iter}{Maximum number of iterations (default = 50).}
+\item{max_iter}{Maximum number of candidate draws to evaluate.}
+}
+\value{
+A list with three components
+\describe{
+\item{data}{Numeric matrix with transformed columns.}
+\item{max_abs_diff}{Largest absolute difference between achieved
+and target correlations.}
+\item{iter}{Index of the candidate draw that achieved
+\code{max_abs_diff}.}
+}
 }
 \description{
-Run Iman–Conover Rank-Preserving Transform
+Applies the “best-of-m” Iman–Conover algorithm to coerce a data matrix
+to a target Spearman rank-correlation structure while preserving each
+column’s marginal distribution.
+}
+\examples{
+set.seed(1)
+x <- matrix(rnorm(300), ncol = 3)
+target <- matrix(c(1, .6, .3,
+                   .6, 1, .4,
+                   .3, .4, 1), 3)
+out <- flexIC(x, target, eps = 0.02, max_iter = 10)
+str(out)
+
 }

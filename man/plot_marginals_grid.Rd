@@ -2,26 +2,29 @@
 % Please edit documentation in R/plot_marginals_grid.R
 \name{plot_marginals_grid}
 \alias{plot_marginals_grid}
-\title{Compare Pre- and Post-flexIC Marginals}
-\usage{
-plot_marginals_grid(
-  original,
-  flex_out,
-  bins = 40,
-  after_lab = "FlexIC epsilon = 0.04"
-)
-}
+\title{Facetted histograms of marginals before and after flexIC}
 \arguments{
-\item{original}{Original (pre-transformed) data.}
+\item{original}{Matrix or data frame of the original variables.}
 
-\item{flex_out}{Output from flexIC() or a data.frame.}
+\item{flex_out}{Either the list returned by \code{flexIC()} or the
+transformed numeric matrix itself.}
 
 \item{bins}{Number of histogram bins.}
 
-\item{after_lab}{Label to display for the post-flexIC panel.}
+\item{after_lab}{Facet-strip label for the post-flexIC panel.}
+}
+\value{
+A \link[ggplot2]{ggplot} object (returned invisibly).
 }
 \description{
-Compare Pre- and Post-flexIC Marginals
+Facetted histograms of marginals before and after flexIC
+}
+\examples{
+\donttest{
+  set.seed(1)
+  x  <- matrix(rnorm(300), ncol = 3)
+  fo <- flexIC(x, eps = 0.02, max_iter = 5)
+  plot_marginals_grid(x, fo, bins = 30)
+}
 
-Run Iman–Conover Rank-Preserving Transform
 }

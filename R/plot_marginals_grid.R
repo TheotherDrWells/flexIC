@@ -1,11 +1,24 @@
-#' @title Compare Pre- and Post-flexIC Marginals
-#' @name plot_marginals_grid
-#' @title Run Iman–Conover Rank-Preserving Transform
-#' @param original Original (pre-transformed) data.
-#' @param flex_out Output from flexIC() or a data.frame.
+#' Facetted histograms of marginals before and after flexIC
+#' @name plot_marginals_grid         
+#' @param original Matrix or data frame of the original variables.
+#' @param flex_out Either the list returned by \code{flexIC()} or the
+#'   transformed numeric matrix itself.
 #' @param bins Number of histogram bins.
-#' @param after_lab Label to display for the post-flexIC panel.
+#' @param after_lab Facet-strip label for the post-flexIC panel.
+#'
+#' @return A \link[ggplot2]{ggplot} object (returned invisibly).
+#'
+#' @examples
+#' \donttest{
+#'   set.seed(1)
+#'   x  <- matrix(rnorm(300), ncol = 3)
+#'   fo <- flexIC(x, eps = 0.02, max_iter = 5)
+#'   plot_marginals_grid(x, fo, bins = 30)
+#' }
+#'
 #' @export
+
+utils::globalVariables("value")
 plot_marginals_grid<-function(original,flex_out,bins=40,after_lab='FlexIC epsilon = 0.04')
   {if(!requireNamespace('ggplot2',quietly=TRUE))stop('install ggplot2');
   if(is.list(flex_out)&&!is.null(flex_out$data))flex_out<-flex_out$data;original<-as.matrix(original);
