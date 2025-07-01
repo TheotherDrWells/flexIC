@@ -1,0 +1,72 @@
+---
+title: "flexIC: Minimal, Runnable Demo"
+author: "Kevin E. Wells, PhD"
+date: "2025-06-26"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{flexIC demo}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+library(flexIC)
+library(mvtnorm)
+library(microbenchmark)
+set.seed(123)
+```
+
+## 1 Simulate marginals
+
+```{r}
+n <- 200; k <- 5
+Sigma <- matrix(0.6, k, k); diag(Sigma) <- 1
+X0  <- mvtnorm::rmvnorm(n, sigma = Sigma)
+R_star <- cor(X0, method = "spearman")
+```
+
+## 2 IC vs flexIC
+
+```{r}
+out_ic   <- flexIC(X0, R_star, eps = "none")
+out_flex <- flexIC(X0, R_star, eps = 0.02, max_iter = 50)
+X_ic     <- out_ic
+X_flex   <- out_flex
+```
+
+## 3 Maximum rank-error
+
+```{r}
+err_ic   <- max(abs(cor(X_ic  , method = "spearman") - R_star))
+err_flex <- max(abs(cor(X_flex, method = "spearman") - R_star))
+
+data.frame(
+  method         = c("IC (eps = 'none')", "flexIC (eps = 0.02)"),
+  max_rank_error = c(err_ic, err_flex)
+)
+```
+
+## 4 Speed benchmark
+
+```{r}
+microbenchmark(
+  IC     = flexIC(X0, R_star, eps = "none"),
+  flexIC = flexIC(X0, R_star, eps = 0.02, max_iter = 50),
+  times  = 100L
+)
+```
+
+## 5 Optional: Visual check
+
+```{r}
+if (requireNamespace("ggplot2", quietly = TRUE)) {
+  flexIC::plot_marginals_grid(X0, X_flex, bins = 30)
+}
+```
+
+## 6 Session info
+
+```{r}
+sessionInfo()
+```

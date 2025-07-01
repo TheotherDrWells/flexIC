@@ -1,0 +1,17 @@
+Package: flexIC
+Type: Package
+Title: Flexible Rank-Preserving Correlation Engine
+Version: 0.1.4
+Authors@R: person("Kevin", "Wells", email = "kevin.e.wells@usm.edu", role = c("aut", "cre"))
+Description: Implements a fast, flexible method for simulating continuous
+    variables with specified rank correlations using the Iman–Conover
+    transformation (Iman & Conover, 1982 <doi:10.1080/03610918208812265>)
+    and back-ranking. Includes plotting tools and error-diagnostics.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Imports: ggplot2, MASS, stats
+Suggests: knitr, rmarkdown, mvtnorm, microbenchmark
+VignetteBuilder: knitr

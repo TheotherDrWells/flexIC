@@ -1,0 +1,9 @@
+^\\.git$
+^\\.Rhistory$
+^\\.Rproj.user$
+^\\.Rproj$
+^README\\.md$
+^doc$
+^Meta$
+^LICENSE\\.md$
+^CRAN-README\\.md$
