@@ -1,3 +1,5 @@
+[![CRAN status](https://www.r-pkg.org/badges/version/flexIC)](https://CRAN.R-project.org/package=flexIC)
+
 # flexIC
 
 **flexIC** is a high-precision Iman–Conover engine for generating continuous variables that preserve **rank correlation** with **marginal fidelity**. It offers **tunable convergence control**, allowing you to aggressively reduce rank-correlation distortion—at the cost of a few extra milliseconds.
